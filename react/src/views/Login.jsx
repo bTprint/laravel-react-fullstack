@@ -9,15 +9,15 @@ export default function Login() {
     return (
         <div className="login-signup-form animated fadeInDown">
             <div className="form">
-                <form onSubmit={onsubmit}>
+                <form onSubmit={onSubmit}>
                     <h1 className="title">
-                        Autentifică-te în contul tau.
+                        Log in to your account.
                     </h1>
-                    <input type="email" placeholder="Adresă Email" autoComplete="on" />
-                    <input type="password" placeholder="Parola" autoComplete="on" />
-                    <button className="btn btn-block">Autentifică-te</button>
+                    <input type="email" placeholder="E-Mail" autoComplete="on" />
+                    <input type="password" placeholder="Password" autoComplete="on" />
+                    <button className="btn btn-block">Sign in</button>
                     <p className="message">
-                        Nu ești înregistrat? <Link to="/signup">Creează un cont.</Link>
+                        Not registered? <Link to="/signup">Create an account</Link>
                     </p>
                 </form>
             </div>

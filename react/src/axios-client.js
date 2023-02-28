@@ -6,7 +6,9 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use((config) => {
     const token = localStorage.getItem('ACCESS_TOKEN')
-    config.headers.Authorization = `Bearer ${token}`
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
 })
 
@@ -15,7 +17,7 @@ axiosClient.interceptors.response.use((response) => {
 }, (error) => {
     try {
         const {response} = error;
-        if (response.status === 401) {
+        if (response && response.status === 401) {
             localStorage.removeItem('ACCESS_TOKEN')
         }
     } catch (e) {

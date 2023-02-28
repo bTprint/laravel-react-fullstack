@@ -18,13 +18,19 @@ export default function Signup() {
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value,
         }
+
         console.log(payload);
+
         axiosClient.post('/signup', payload)
             .then(({data}) => {
+                console.log("POST request sent");
+
                 setUser(data.user)
                 setToken(data.token)
             })
             .catch(err => {
+                console.log("Can't send POST request");
+
                 const response = err.response;
                 if (response && response.status === 422) {
                     console.log(response.data.errors);
@@ -36,9 +42,9 @@ export default function Signup() {
     return (
         <div className="login-signup-form animated fadeInDown">
             <div className="form">
-                <form onSubmit={onsubmit}>
+                <form onSubmit={onSubmit}>
                     <h1 className="title">
-                        Înregistrează-ți contul
+                        Register your account
                     </h1>
                     {errors && <div className="alert">
                         {Object.keys(errors).map(key => (
@@ -47,13 +53,13 @@ export default function Signup() {
                     </div>
                     }
 
-                    <input ref={nameRef} type="text" placeholder="Nume, Prenume" autoComplete="on" />
-                    <input ref={emailRef} type="email" placeholder="Adresă Email"  autoComplete="on" />
-                    <input ref={passwordRef} type="password" placeholder="Parola" autoComplete="off" />
-                    <input ref={passwordConfirmationRef} type="password" placeholder="Confirmă Parola" autoComplete="off" />
-                    <button className="btn btn-block">Înregistrează-te</button>
+                    <input ref={nameRef} type="text" placeholder="Name, First name" autoComplete="on" />
+                    <input ref={emailRef} type="email" placeholder="E-Mail"  autoComplete="on" />
+                    <input ref={passwordRef} type="password" placeholder="Password" autoComplete="off" />
+                    <input ref={passwordConfirmationRef} type="password" placeholder="Confirm Password" autoComplete="off" />
+                    <button className="btn btn-block">Register</button>
                     <p className="message">
-                        Ai un cont deja? <Link to="/login">Autentifica-te aici</Link>
+                        Already have an account? <Link to="/login">Sign in</Link>
                     </p>
                 </form>
             </div>
