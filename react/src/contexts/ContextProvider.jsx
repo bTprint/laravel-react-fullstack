@@ -10,7 +10,6 @@ const StateContext = createContext({
 
 export const ContextProvider = ({children}) => {
     const [user, setUser] = useState({
-        name: 'Sebastian'
     });
     const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
 
@@ -32,7 +31,7 @@ export const ContextProvider = ({children}) => {
         }}>
             {children}
         </StateContext.Provider>
-    )
+    );
 }
 
-export const useStateContext = () => useContext(StateContext)
+export const useStateContext = () => useContext(StateContext);

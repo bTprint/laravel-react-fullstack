@@ -1,17 +1,19 @@
 import {Link} from "react-router-dom";
-import {useRef, useState} from "react";
+import {createRef, useState} from "react";
 import axiosClient from "../axios-client.js";
 import {useStateContext} from "../contexts/ContextProvider.jsx";
 
 export default function Signup() {
-    const nameRef = useRef();
-    const emailRef = useRef();
-    const passwordRef = useRef();
-    const passwordConfirmationRef = useRef();
-    const [errors, setErrors] = useState(null);
+    const nameRef = createRef()
+    const emailRef = createRef()
+    const passwordRef = createRef()
+    const passwordConfirmationRef = createRef()
     const {setUser, setToken} = useStateContext()
-    const onSubmit = (ev) => {
+    const [errors, setErrors] = useState(null)
+
+    const onSubmit = ev => {
         ev.preventDefault()
+
         const payload = {
             name: nameRef.current.value,
             email: emailRef.current.value,
@@ -19,21 +21,18 @@ export default function Signup() {
             password_confirmation: passwordConfirmationRef.current.value,
         }
 
-        console.log(payload);
-
         axiosClient.post('/signup', payload)
             .then(({data}) => {
                 console.log("POST request sent");
 
                 setUser(data.user)
-                setToken(data.token)
+                setToken(data.token);
             })
             .catch(err => {
                 console.log("Can't send POST request");
 
                 const response = err.response;
                 if (response && response.status === 422) {
-                    console.log(response.data.errors);
                     setErrors(response.data.errors)
                 }
             })
@@ -44,7 +43,7 @@ export default function Signup() {
             <div className="form">
                 <form onSubmit={onSubmit}>
                     <h1 className="title">
-                        Register your account
+                        Înregistrează-ți contul
                     </h1>
                     {errors && <div className="alert">
                         {Object.keys(errors).map(key => (
@@ -53,13 +52,13 @@ export default function Signup() {
                     </div>
                     }
 
-                    <input ref={nameRef} type="text" placeholder="Name, First name" autoComplete="on" />
-                    <input ref={emailRef} type="email" placeholder="E-Mail"  autoComplete="on" />
-                    <input ref={passwordRef} type="password" placeholder="Password" autoComplete="off" />
-                    <input ref={passwordConfirmationRef} type="password" placeholder="Confirm Password" autoComplete="off" />
+                    <input ref={nameRef} type="text" placeholder="Nume, Prenume" autoComplete="on" />
+                    <input ref={emailRef} type="email" placeholder="Adresa e-mail"  autoComplete="on" />
+                    <input ref={passwordRef} type="password" placeholder="Parolă" autoComplete="off" />
+                    <input ref={passwordConfirmationRef} type="password" placeholder="Confirmă parola" autoComplete="off" />
                     <button className="btn btn-block">Register</button>
                     <p className="message">
-                        Already have an account? <Link to="/login">Sign in</Link>
+                        Ai deja un cont? <Link to="/login">Conectează-te aici</Link>
                     </p>
                 </form>
             </div>

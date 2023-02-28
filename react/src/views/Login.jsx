@@ -1,9 +1,39 @@
 import {Link} from "react-router-dom";
+import {useRef, useState} from "react";
+import axiosClient from "../axios-client.js";
+import {useStateContext} from "../contexts/ContextProvider.jsx";
 
 export default function Login() {
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const {setUser, setToken} = useStateContext()
+    const [errors, setErrors] = useState(null)
 
     const onSubmit = (ev) => {
         ev.preventDefault()
+
+        const payload = {
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+        }
+        setErrors(null)
+        axiosClient.post('/login', payload)
+            .then(({data}) => {
+                setUser(data.user)
+                setToken(data.token);
+            })
+            .catch(err => {
+                const response = err.response;
+                if (response && response.status === 422) {
+                    if (response.data.errors) {
+                        setErrors(response.data.errors)
+                    } else {
+                        setErrors({
+                            email: [response.data.message]
+                        })
+                    }
+                }
+            })
     }
 
     return (
@@ -11,13 +41,19 @@ export default function Login() {
             <div className="form">
                 <form onSubmit={onSubmit}>
                     <h1 className="title">
-                        Log in to your account.
+                        Autentifica-te în contul tau.
                     </h1>
-                    <input type="email" placeholder="E-Mail" autoComplete="on" />
-                    <input type="password" placeholder="Password" autoComplete="on" />
-                    <button className="btn btn-block">Sign in</button>
+                    {errors && <div className="alert">
+                        {Object.keys(errors).map(key => (
+                            <p key={key}>{errors[key][0]}</p>
+                        ))}
+                    </div>
+                    }
+                    <input ref={emailRef} type="email" placeholder="Adresă Email" autoComplete="on" />
+                    <input ref={passwordRef} type="password" placeholder="Parola" autoComplete="on" />
+                    <button className="btn btn-block">Autentifică-te</button>
                     <p className="message">
-                        Not registered? <Link to="/signup">Create an account</Link>
+                        Nu ești înregistrat? <Link to="/signup">Creează un cont.</Link>
                     </p>
                 </form>
             </div>
